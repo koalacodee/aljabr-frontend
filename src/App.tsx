@@ -1,19 +1,27 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import "./App.css";
 import Terms from "./components/Terms";
 import MainForm from "./components/MainForm";
+import Success from "./components/Success";
+import useAssetsStore from "./stores/AssetsStore";
+import { useScreenStore } from "./stores/ScreenStore";
 
 function App() {
-  const [count, setCount] = useState(0);
-  const [showTerms, setShowTerms] = useState(false);
+  const { currentScreen: screen } = useScreenStore();
+  const { fetchAssets } = useAssetsStore();
+  useEffect(() => {
+    fetchAssets();
+  }, [fetchAssets]);
 
   return (
     <div className="text-white max-w-xl m-auto h-screen mt-0 overflow-y-auto overflow-x-hidden bg-blue-600">
-      {showTerms ? (
-        <Terms onTermsCancel={() => setShowTerms(false)} />
-      ) : (
-        <MainForm onTermsClick={() => setShowTerms(true)} />
-      )}
+      {screen === "TERMS" ? (
+        <Terms />
+      ) : screen === "FORM" || screen === "FORM_LANDING" ? (
+        <MainForm />
+      ) : screen == "SUCCESS" ? (
+        <Success />
+      ) : null}
     </div>
   );
 }

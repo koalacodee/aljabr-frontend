@@ -1,14 +1,11 @@
-import type { MouseEventHandler } from "react";
-import jabrLogo from "/jabr-logo.webp";
-import sponsorsLogos from "/sponsors-logos.webp";
-export default function Terms({
-  onTermsCancel,
-}: {
-  onTermsCancel: MouseEventHandler<HTMLSpanElement>;
-}) {
+import useAssetsStore, { AssetName } from "../stores/AssetsStore";
+import { useScreenStore } from "../stores/ScreenStore";
+export default function Terms() {
+  const { assets } = useAssetsStore();
+
   return (
     <div>
-      <TermsHeader onTermsCancel={onTermsCancel} />
+      <TermsHeader />
       <div className="h-full overflow-auto no-scrollbar">
         <div className="h-full overflow-auto p-4 no-scrollbar">
           <div dir="rtl">
@@ -224,11 +221,12 @@ export default function Terms({
         </div>
         <div className="bg-blue-600 mb-8 p-4 pb-0 flex items-center justify-center">
           <img
-            src={sponsorsLogos}
+            src={assets[AssetName.SPONSORS_LOGOS]}
             alt="Sponsors Logos"
             loading="lazy"
             decoding="async"
             className="h-full w-72 text-transparent"
+            crossOrigin="anonymous"
           />
         </div>
       </div>
@@ -236,11 +234,9 @@ export default function Terms({
   );
 }
 
-function TermsHeader({
-  onTermsCancel,
-}: {
-  onTermsCancel: MouseEventHandler<HTMLSpanElement>;
-}) {
+function TermsHeader() {
+  const { assets } = useAssetsStore();
+  const { setCurrentScreen } = useScreenStore();
   return (
     <div
       className="flex mt-0 justify-between items-start gap-4 mb-4z border-b border-b-main p-4 bg-white sticky top-0"
@@ -248,15 +244,16 @@ function TermsHeader({
     >
       <div>
         <img
-          src={jabrLogo}
+          src={assets[AssetName.TERMS_LOGO]}
           className="w-auto h-[30px] object-contain text-transparent"
           alt="Jabr Logo"
           loading="lazy"
           decoding="async"
+          crossOrigin="anonymous"
         />
       </div>
       <span
-        onClick={onTermsCancel}
+        onClick={() => setCurrentScreen("FORM")}
         className="cursor-pointer text-red-500 text-xl w-7 h-7 rounded-full bg-white flex items-center justify-center"
       >
         x

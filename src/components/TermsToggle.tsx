@@ -1,39 +1,29 @@
-import {
-  useState,
-  type ChangeEventHandler,
-  type MouseEventHandler,
-} from "react";
+import { useState, type ChangeEventHandler } from "react";
+import { useScreenStore } from "../stores/ScreenStore";
 
-function TermsToggle({
-  onTermsClick,
-  onAcceptClick,
-}: {
-  onTermsClick: MouseEventHandler<HTMLSpanElement>;
-  onAcceptClick: MouseEventHandler<HTMLButtonElement>;
-}) {
+function TermsToggle() {
   const [isTermsApparent, setIsTermsApparent] = useState(true);
 
   return (
     <div className="py-4 bg-white text-center select-none">
       {isTermsApparent ? (
         <TermsLink
-          onTermsClick={onTermsClick}
           onTermsCheck={(e) => setIsTermsApparent(e.target.checked === false)}
         />
       ) : (
-        <AcceptButtons onAcceptClick={onAcceptClick} />
+        <AcceptButtons />
       )}
     </div>
   );
 }
 
 function TermsLink({
-  onTermsClick,
   onTermsCheck,
 }: {
-  onTermsClick: MouseEventHandler<HTMLSpanElement>;
   onTermsCheck: ChangeEventHandler<HTMLInputElement>;
 }) {
+  const { setCurrentScreen } = useScreenStore();
+
   return (
     <div
       className="text-blue-600 mb-4 flex items-center gap-1 justify-center"
@@ -50,22 +40,23 @@ function TermsLink({
         />
         <span>اوافق على</span>
       </label>
-      <span className="border-b cursor-pointer" onClick={onTermsClick}>
+      <span
+        className="border-b cursor-pointer"
+        onClick={() => setCurrentScreen("TERMS")}
+      >
         الشروط و الاحكام
       </span>
     </div>
   );
 }
 
-function AcceptButtons({
-  onAcceptClick,
-}: {
-  onAcceptClick: MouseEventHandler<HTMLButtonElement>;
-}) {
+function AcceptButtons() {
+  const { setCurrentScreen } = useScreenStore();
+
   return (
     <button
       className="bg-blue-600 text-white rounded-md px-12 py-3 text-lg font-bold"
-      onClick={onAcceptClick}
+      onClick={() => setCurrentScreen("FORM")}
     >
       التالي
     </button>
